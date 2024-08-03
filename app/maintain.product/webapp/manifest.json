@@ -129,6 +129,15 @@
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
                     "type": "GridTable"
+                  },
+                  "actions": {
+                    "ActionUploadExcel": {
+                      "press": "excel.upload.maintain.product.ext.controller.UploadExcel.onActionUploadExcel",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "{i18n>uploadExcel}"
+                    }
                   }
                 }
               }

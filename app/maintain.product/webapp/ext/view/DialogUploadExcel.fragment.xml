@@ -1,0 +1,53 @@
+<core:FragmentDefinition
+    xmlns:layout="sap.ui.layout"
+    xmlns:unified="sap.ui.unified"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog id="id.MainDialog">
+        <customHeader>
+            <Toolbar id="id.MainDialogToolbar">
+                <Title
+                    id="idUploadExcel.Title"
+                    text="Upload Excel"
+                />
+                <ToolbarSpacer />
+                <Button
+                    id="idDownloadTemplate.Button"
+                    icon="sap-icon://download-from-cloud"
+                    text="Download Template"
+                    press="onDownloadTemplateButtonPress"
+                />
+            </Toolbar>
+        </customHeader>
+        <content>
+            <layout:VerticalLayout
+                id="id.ContentVerticalLayout"
+                class="sapUiResponsiveMargin"
+            >
+                <unified:FileUploader
+                    id="id.FileUploader"
+                    width="400px"
+                />
+            </layout:VerticalLayout>
+        </content>
+        <footer>
+            <Toolbar id="id.FooterToolbar">
+                <content>
+                    <ToolbarSpacer />
+                    <Button
+                        id="idUpload.Button"
+                        text="Upload"
+                        type="Emphasized"
+                        press="onUploadButtonPress"
+                    />
+                    <Button
+                        id="idCancel.Button"
+                        text="Cancel"
+                        press="onCancelButtonPress"
+                    />
+                </content>
+            </Toolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>
