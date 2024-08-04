@@ -7,7 +7,7 @@
 |**Generation Platform**<br>Visual Studio Code|
 |**Template Used**<br>List Report Page V4|
 |**Service Type**<br>Local Cap|
-|**Service URL**<br>http://localhost:4004/odata/v4/product-srv/
+|**Service URL**<br>http://localhost:4004/odata/v4/ProductSrv/
 |**Module Name**<br>maintain.product|
 |**Application Title**<br>Maintain Products|
 |**Namespace**<br>excel.upload|

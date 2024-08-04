@@ -15,3 +15,14 @@ entity Product : cuid, managed {
     uom    : String(3)
     @Common.Label : '{i18n>uom}';
 }
+
+entity File : cuid, managed {
+    @Core.MediaType  : mediaType
+    content   : LargeBinary;
+
+    @Core.IsMediaType: true
+    mediaType : String;
+    fileName  : String;
+    size      : Integer;
+    url       : String;
+}
