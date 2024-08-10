@@ -4,8 +4,6 @@ using {db as schema} from '../db/schema';
 service ProductSrv {
 
     @odata.draft.enabled
-    entity Products as projection on schema.Product;
-
-    entity Files    as projection on schema.File;
+    entity SingletonSet as projection on schema.Singleton;
 
 }
