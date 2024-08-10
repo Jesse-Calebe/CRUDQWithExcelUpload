@@ -137,8 +137,8 @@
                   "actions": {
                     "idUploadCsv": {
                       "press": ".extension.jcss.maintain.product.ext.controller.ProductObjectPage.onUploadCsvPress",
-                      "visible": "{ui>/editable}",
-                      "enabled": "{ui>/editable}",
+                      "visible": "{= ${ui>/editMode} === 'Editable'}",
+                      "enabled": "{= ${ui>/editMode} === 'Editable'}",
                       "requiresSelection": false,
                       "text": "{i18n>uploadCsv}"
                     }
