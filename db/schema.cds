@@ -14,11 +14,10 @@ entity Singleton {
 
 entity Product : cuid, managed {
     name      : String(255)
-    @Common.Label : '{i18n>name}';
+    @Common.Label: '{i18n>name}';
     weight    : Decimal(10, 3)
-    @Measures.Unit: uom
-    @Common.Label : '{i18n>weight}';
+    @Common.Label: '{i18n>weight}';
     uom       : String(3)
-    @Common.Label : '{i18n>uom}';
+    @Common.Label: '{i18n>uom}';
     singleton : Association to one Singleton;
 }

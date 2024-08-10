@@ -131,8 +131,30 @@
               "editableHeaderContent": false,
               "contextPath": "/SingletonSet",
               "navigation": {},
-              "sectionLayout": "Page"
+              "sectionLayout": "Page",
+              "controlConfiguration": {
+                "product/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "actions": {
+                    "idUploadCsv": {
+                      "press": ".extension.jcss.maintain.product.ext.controller.ProductObjectPage.onUploadCsvPress",
+                      "visible": "{ui>/editable}",
+                      "enabled": "{ui>/editable}",
+                      "requiresSelection": false,
+                      "text": "{i18n>uploadCsv}"
+                    }
+                  }
+                }
+              }
             }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ObjectPage.ObjectPageController": {
+            "controllerName": "jcss.maintain.product.ext.controller.ProductObjectPage"
           }
         }
       }

@@ -6,7 +6,9 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@sap/cds": "^7",
+    "@sap/cds": "^8.1.1",
+    "@sap/cds-dk": "^8.1.1",
+    "@sap/cds-fiori": "^1.2.7",
     "express": "^4"
   },
   "devDependencies": {
@@ -25,7 +27,6 @@
     }
   },
   "sapux": [
-    "app/maintain.product",
     "app/maintain.product"
   ]
 }
