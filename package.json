@@ -25,6 +25,7 @@
     }
   },
   "sapux": [
+    "app/maintain.product",
     "app/maintain.product"
   ]
 }

@@ -7,8 +7,9 @@ namespace db;
 
 
 entity Singleton {
-    product : Composition of many Product
-                  on product.singleton = $self;
+    key id      : String(5);
+        product : Composition of many Product
+                      on product.singleton = $self;
 }
 
 entity Product : cuid, managed {
