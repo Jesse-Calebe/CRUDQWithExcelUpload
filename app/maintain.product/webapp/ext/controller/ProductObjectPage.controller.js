@@ -35,15 +35,18 @@ sap.ui.define(
             oUploadCsvFragment.open();
           }
         },
-
-        onCancelButtonPress: function (oEvent) {
+        onDownloadTemplateButtonPress: function (oEvent) {
           debugger;
         },
         onUploadButtonPress: function (oEvent) {
           debugger;
         },
-        onDownloadTemplateButtonPress: function (oEvent) {
-          debugger;
+        onCancelButtonPress: function (oEvent) {
+          let oDialog = oEvent.getSource().getParent();
+          let oFileUploader = oDialog.getContent()[0].getContent()[0];
+
+          oFileUploader.clear();
+          oDialog.close();
         },
       }
     );
