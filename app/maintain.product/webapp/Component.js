@@ -5,14 +5,21 @@ sap.ui.define(["sap/fe/core/AppComponent"], function (Component) {
     metadata: {
       manifest: "json",
     },
-    init: function () {
-      debugger;
+    init: async function () {
       Component.prototype.init.apply(this, arguments);
 
-      let bActiveEntity = true;
+      // GET request to SingletonSet service in backend
+      let oSingletonSetContext = this.getModel().bindContext("/SingletonSet");
+      let oDataResult = await oSingletonSetContext.requestObject();
 
+      // Determine active entity state based on draft existence
+      let bActiveEntity = oDataResult.value[0].HasDraftEntity ? false : true;
+
+      // Build key for route
       let sKey = `id='dummy',IsActiveEntity=${bActiveEntity}`;
-      this.getRouter().navTo("SingletonSet", { key: sKey });
+
+      // Navigate to object page
+      this.getRouter().navTo("SingletonSetObjectPage", { key: sKey });
     },
   });
 });
