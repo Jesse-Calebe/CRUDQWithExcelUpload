@@ -1,0 +1,41 @@
+<core:FragmentDefinition
+    xmlns:layout="sap.ui.layout"
+    xmlns:unified="sap.ui.unified"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog id="id.Dialog" class="sapUiResponsiveMargin">
+        <customHeader>
+            <Toolbar id="id.Toolbar">
+                <Title id="idUploadCSV.Title" text="{i18n>uploadCsv}"/>
+                <ToolbarSpacer id="id.ToolbarSpacer" />
+                <Button
+                    id="idDownloadTemplate.Button"
+                    text="{i18n>downloadTemplate}"
+                    icon="sap-icon://download-from-cloud"
+                    press="onDownloadTemplateButtonPress"
+                />
+            </Toolbar>
+        </customHeader>
+        <content>
+            <layout:VerticalLayout id="id.VerticalLayout" class="sapUiResponsiveMargin">
+                <unified:FileUploader id="id.FileUploader" fileType="csv"/>
+            </layout:VerticalLayout>
+        </content>
+        <beginButton>
+            <Button
+                id="idUpload.Button"
+                text="{i18n>upload}"
+                type="Emphasized"
+                press="onUploadButtonPress"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                id="idCancel.Button"
+                text="{i18n>cancel}"
+                press="onCancelButtonPress"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

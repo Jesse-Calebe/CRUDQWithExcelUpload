@@ -3,6 +3,8 @@ sap.ui.define(
   function (ControllerExtension) {
     "use strict";
 
+    var oUploadCsvFragment;
+
     return ControllerExtension.extend(
       "jcss.maintain.product.ext.controller.ProductObjectPage",
       {
@@ -18,8 +20,29 @@ sap.ui.define(
             var oModel = this.base.getExtensionAPI().getModel();
           },
         },
-        onUploadCsvPress: function (oEvent) {
-          console.log("onUploadCsvPress");
+        onUploadCsvPress: async function (oEvent) {
+          if (!oUploadCsvFragment) {
+            oUploadCsvFragment = await this.base
+              .getExtensionAPI()
+              .loadFragment({
+                id: "idUploadCsvFrag",
+                name: "jcss.maintain.product.ext.view.dialogs.UploadCsv",
+                controller: this,
+              });
+          }
+
+          if (oUploadCsvFragment) {
+            oUploadCsvFragment.open();
+          }
+        },
+
+        onCancelButtonPress: function (oEvent) {
+          debugger;
+        },
+        onUploadButtonPress: function (oEvent) {
+          debugger;
+        },
+        onDownloadTemplateButtonPress: function (oEvent) {
           debugger;
         },
       }
