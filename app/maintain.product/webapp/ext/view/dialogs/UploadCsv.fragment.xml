@@ -19,7 +19,11 @@
         </customHeader>
         <content>
             <layout:VerticalLayout id="id.VerticalLayout" class="sapUiResponsiveMargin">
-                <unified:FileUploader id="id.FileUploader" fileType="csv"/>
+                <unified:FileUploader 
+                    id="id.FileUploader" 
+                    fileType="csv"
+                    change="onFileUploaderChange"
+                />
             </layout:VerticalLayout>
         </content>
         <beginButton>
