@@ -6,6 +6,9 @@ annotate service.SingletonSet with @(
     UI.HeaderInfo  : {
         TypeName      : '{i18n>Product}',
         TypeNamePlural: '{i18n>Products}',
+        Title: {
+            Value : '{i18n>maintainProducts}',
+        }
     },
     UI.Facets      : [{
         $Type : 'UI.ReferenceFacet',
