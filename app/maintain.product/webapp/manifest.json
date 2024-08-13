@@ -108,11 +108,6 @@
           "pattern": "SingletonSet({key}):?query:",
           "name": "SingletonSetObjectPage",
           "target": "SingletonSetObjectPage"
-        },
-        {
-          "pattern": "SingletonSet({key})/product({key2}):?query:",
-          "name": "SingletonSet_productObjectPage",
-          "target": "SingletonSet_productObjectPage"
         }
       ],
       "targets": {
@@ -150,13 +145,7 @@
             "settings": {
               "editableHeaderContent": false,
               "contextPath": "/SingletonSet",
-              "navigation": {
-                "product": {
-                  "detail": {
-                    "route": "SingletonSet_productObjectPage"
-                  }
-                }
-              },
+              "navigation": {},
               "sectionLayout": "Page",
               "controlConfiguration": {
                 "product/@com.sap.vocabularies.UI.v1.LineItem": {
@@ -171,23 +160,15 @@
                   },
                   "tableSettings": {
                     "creationMode": {
-                      "inlineCreationRowsHiddenInEditMode": true
-                    }
+                      "inlineCreationRowsHiddenInEditMode": true,
+                      "name": "InlineCreationRows"
+                    },
+                    "condensedTableLayout": true,
+                    "type": "GridTable",
+                    "widthIncludingColumnHeader": true
                   }
                 }
               }
-            }
-          }
-        },
-        "SingletonSet_productObjectPage": {
-          "type": "Component",
-          "id": "SingletonSet_productObjectPage",
-          "name": "sap.fe.templates.ObjectPage",
-          "options": {
-            "settings": {
-              "editableHeaderContent": false,
-              "contextPath": "/SingletonSet/product",
-              "navigation": {}
             }
           }
         }
