@@ -198,7 +198,13 @@ sap.ui.define(
         _handleFileOnError: function (oEvent) {
           // Displays an alert if the file could not be read.
           if (oEvent.target.error.name == "NotReadableError") {
-            alert("Cannot read");
+            let oMessageStrip = oUploadCsvFragment
+              .getContent()[0]
+              .getContent()[0];
+
+            oMessageStrip.setType(sap.ui.core.MessageType.Error);
+            oMessageStrip.setText("Cannot read file.");
+            oMessageStrip.setVisible(true);
           }
         },
         /**
@@ -217,7 +223,7 @@ sap.ui.define(
           // Gets the file uploader from the upload dialog fragment.
           let oFileUploader = oUploadCsvFragment
             .getContent()[0]
-            .getContent()[0];
+            .getContent()[1];
 
           // Clears the file uploader.
           oFileUploader.clear();

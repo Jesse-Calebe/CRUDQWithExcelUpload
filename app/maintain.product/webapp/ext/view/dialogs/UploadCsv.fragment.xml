@@ -19,6 +19,11 @@
         </customHeader>
         <content>
             <layout:VerticalLayout id="id.VerticalLayout" class="sapUiResponsiveMargin">
+                <MessageStrip 
+                    id="idMessageStrip" 
+                    visible="false"
+                    showIcon="true"
+                />
                 <unified:FileUploader 
                     id="id.FileUploader" 
                     fileType="csv"
