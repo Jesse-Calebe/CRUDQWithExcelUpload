@@ -19,5 +19,6 @@ entity Product : managed {
         @Common.Label: '{i18n>weight}';
         uom       : String(3)
         @Common.Label: '{i18n>uom}';
-        singleton : Association to one Singleton;
+        singleton : Association to one Singleton
+        @UI.Hidden;
 }
