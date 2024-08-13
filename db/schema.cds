@@ -11,6 +11,7 @@ entity Singleton {
 
 entity Product : managed {
     key productId : String(20)
+        @mandatory
         @Common.Label: '{i18n>productId}';
         name      : String(255)
         @Common.Label: '{i18n>name}';
