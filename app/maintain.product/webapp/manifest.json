@@ -108,6 +108,11 @@
           "pattern": "SingletonSet({key}):?query:",
           "name": "SingletonSetObjectPage",
           "target": "SingletonSetObjectPage"
+        },
+        {
+          "pattern": "SingletonSet({key})/product({key2}):?query:",
+          "name": "SingletonSet_productObjectPage",
+          "target": "SingletonSet_productObjectPage"
         }
       ],
       "targets": {
@@ -145,7 +150,13 @@
             "settings": {
               "editableHeaderContent": false,
               "contextPath": "/SingletonSet",
-              "navigation": {},
+              "navigation": {
+                "product": {
+                  "detail": {
+                    "route": "SingletonSet_productObjectPage"
+                  }
+                }
+              },
               "sectionLayout": "Page",
               "controlConfiguration": {
                 "product/@com.sap.vocabularies.UI.v1.LineItem": {
@@ -157,9 +168,26 @@
                       "requiresSelection": false,
                       "text": "{i18n>uploadCsv}"
                     }
+                  },
+                  "tableSettings": {
+                    "creationMode": {
+                      "inlineCreationRowsHiddenInEditMode": true
+                    }
                   }
                 }
               }
+            }
+          }
+        },
+        "SingletonSet_productObjectPage": {
+          "type": "Component",
+          "id": "SingletonSet_productObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/SingletonSet/product",
+              "navigation": {}
             }
           }
         }

@@ -13,7 +13,7 @@ sap.ui.define(["sap/fe/core/AppComponent"], function (Component) {
       let oDataResult = await oSingletonSetContext.requestObject();
 
       // Determine active entity state based on draft existence
-      let bActiveEntity = oDataResult.value[0].HasDraftEntity ? false : true;
+      let bActiveEntity = !oDataResult.value[0].HasDraftEntity;
 
       // Build key for route
       let sKey = `id='dummy',IsActiveEntity=${bActiveEntity}`;

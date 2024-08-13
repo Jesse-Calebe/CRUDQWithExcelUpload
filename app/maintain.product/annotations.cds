@@ -6,9 +6,7 @@ annotate service.SingletonSet with @(
     UI.HeaderInfo  : {
         TypeName      : '{i18n>Product}',
         TypeNamePlural: '{i18n>Products}',
-        Title: {
-            Value : '{i18n>maintainProducts}',
-        }
+        Title         : {Value: '{i18n>maintainProducts}', }
     },
     UI.Facets      : [{
         $Type : 'UI.ReferenceFacet',
@@ -23,17 +21,54 @@ annotate service.SingletonSet with @(
     }, ],
 );
 
-annotate service.Product with @(UI.LineItem: [
-    {
-        $Type: 'UI.DataField',
-        Value: name
+annotate service.Product with @(
+    UI.HeaderInfo         : {
+        TypeName      : '{i18n>Product}',
+        TypeNamePlural: '{i18n>Products}',
+        Title         : {
+            $Type: 'UI.DataField',
+            Value: '{i18n>Product}: {productId}',
+        },
     },
-    {
-        $Type: 'UI.DataField',
-        Value: weight,
+    UI.Facets             : [{
+        $Type : 'UI.ReferenceFacet',
+        Label : '{i18n>details}',
+        ID    : 'details',
+        Target: '@UI.FieldGroup#Details',
+    }, ],
+    UI.FieldGroup #Details: {
+        $Type: 'UI.FieldGroupType',
+        Data : [
+            {
+                $Type: 'UI.DataField',
+                Value: name,
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: weight,
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: uom,
+            },
+        ]
     },
-    {
-        $Type: 'UI.DataField',
-        Value: uom,
-    },
-]);
+    UI.LineItem           : [
+        {
+            $Type: 'UI.DataField',
+            Value: productId,
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: name
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: weight,
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: uom,
+        },
+    ]
+);

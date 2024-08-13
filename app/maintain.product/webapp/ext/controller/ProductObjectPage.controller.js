@@ -52,7 +52,7 @@ sap.ui.define(
           oReader.onerror = this._handleFileOnError;
         },
         onDownloadTemplateButtonPress: function (oEvent) {
-          const aContent = [["Name;Weight;Unit of Measure"], ["Café;200;g"]];
+          const aContent = [["Product ID;Name;Weight;Unit of Measure"], ["1;Café;200;g"]];
           const sContent = aContent.join("\r\n");
           const sCsvType = "text/csv;charset=utf-8,%EF%BB%BF,SEP=";
 
@@ -86,9 +86,10 @@ sap.ui.define(
 
             if (!(aLineData.length === 0) && !(aLineData[0] === "")) {
               let oCreated = await oProduct.create({
-                name: aLineData[0],
-                weight: aLineData[1],
-                uom: aLineData[2],
+                productId: aLineData[0],
+                name: aLineData[1],
+                weight: aLineData[2],
+                uom: aLineData[3],
               });
             }
           });
