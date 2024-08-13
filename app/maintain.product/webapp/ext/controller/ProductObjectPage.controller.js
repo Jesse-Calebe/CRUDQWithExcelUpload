@@ -3,6 +3,7 @@ sap.ui.define(
   function (ControllerExtension) {
     "use strict";
 
+    // Globals
     var oUploadCsvFragment, oFileToRead, oProduct, that;
 
     return ControllerExtension.extend(
@@ -20,13 +21,33 @@ sap.ui.define(
             var oModel = this.base.getExtensionAPI().getModel();
           },
         },
+        /**
+         * Handles the CSV upload button click event.
+         *
+         * This function is called when the CSV upload button is pressed. It creates a "bindList" based on
+         * the SingletonSet context, loads a dialog fragment for the CSV upload (if it isn't already loaded), and
+         * then opens the upload dialog.
+         *
+         * @async
+         * @function onUploadCsvPress
+         * @param {sap.ui.base.Event} oEvent - The click event that triggered the function.
+         * @memberOf jcss.maintain.product.ext.controller.ProductObjectPage
+         * @returns {Promise<void>} Retorna uma Promise que é resolvida quando o diálogo de upload é aberto.
+         * @author Jesse-Calebe
+         */
         onUploadCsvPress: async function (oEvent) {
+          // Gets the model associated with the base component.
           let oModel = this.base.getModel();
+
+          // Transfers "this" to a global object, to be accessed in the "_handleFileOnLoad" function.
           that = this;
+
+          // Creates a "bindList" based on the SingletonSet context
           oProduct = oModel.bindList(
             "/SingletonSet(id='dummy',IsActiveEntity=false)/product"
           );
 
+          // Loads the CSV upload dialog fragment if it is not already loaded.
           if (!oUploadCsvFragment) {
             oUploadCsvFragment = await this.base
               .getExtensionAPI()
@@ -37,55 +58,122 @@ sap.ui.define(
               });
           }
 
+          // Opens the CSV upload dialog.
           if (oUploadCsvFragment) {
             oUploadCsvFragment.open();
           }
         },
+        /**
+         * Handles the file selection event in the file uploader.
+         *
+         * This function is triggered when a file is selected in the file uploader. It retrieves the selected file
+         * from the event parameters and stores it for further processing.
+         *
+         * @function onFileUploaderChange
+         * @param {sap.ui.base.Event} oEvent - The event object containing details about the file selection.
+         * @memberOf jcss.maintain.product.ext.controller.ProductObjectPage
+         * @author Jesse-Calebe
+         */
         onFileUploaderChange: function (oEvent) {
+          // Retrieves the selected file from the event parameters.
           oFileToRead = oEvent.getParameters().files["0"];
         },
+        /**
+         * Handles the upload button press event.
+         *
+         * This function reads the selected file as text and sets up event handlers for load and error events.
+         *
+         * @function onUploadButtonPress
+         * @param {sap.ui.base.Event} oEvent - The click event that triggered the function.
+         * @memberOf jcss.maintain.product.ext.controller.ProductObjectPage
+         * @author Jesse-Calebe
+         */
         onUploadButtonPress: function (oEvent) {
+          // Creates a new FileReader to read the selected file.
           let oReader = new FileReader();
 
+          // Reads the selected file as text. Sets up the onload event handler and the onerror event handler.
           oReader.readAsText(oFileToRead);
           oReader.onload = this._handleFileOnLoad;
           oReader.onerror = this._handleFileOnError;
         },
+        /**
+         * Handles the download template button press event.
+         *
+         * This function generates a CSV template file and triggers the download process.
+         *
+         * @function onDownloadTemplateButtonPress
+         * @param {sap.ui.base.Event} oEvent - The click event that triggered the function.
+         * @memberOf jcss.maintain.product.ext.controller.ProductObjectPage
+         * @author Jesse-Calebe
+         */
         onDownloadTemplateButtonPress: function (oEvent) {
-          const aContent = [["Product ID;Name;Weight;Unit of Measure"], ["1;Café;200;g"]];
+          // Creates the content for the CSV template.
+          const aContent = [
+            ["Product ID;Name;Weight;Unit of Measure"],
+            ["1;Café;200;g"],
+          ];
           const sContent = aContent.join("\r\n");
           const sCsvType = "text/csv;charset=utf-8,%EF%BB%BF,SEP=";
 
+          // Creates a Blob object with the CSV content.
           let oCsvData = new Blob(["\ufeff" + sContent], { type: sCsvType });
 
+          // Generates a URL for the Blob object.
           let sTextFileURL = URL.createObjectURL(oCsvData);
 
+          // Creates a temporary link element to trigger the download.
           let oLink = document.createElement("a");
 
+          // Sets the download URL and filename.
           oLink.href = sTextFileURL;
           oLink.download = "Template";
+
+          // Triggers the download.
           oLink.click();
         },
+        /**
+         * Handles the cancel button press event.
+         *
+         * This function clears the file uploader and closes the upload dialog.
+         *
+         * @function onCancelButtonPress
+         * @param {sap.ui.base.Event} oEvent - The click event that triggered the function.
+         * @memberOf jcss.maintain.product.ext.controller.ProductObjectPage
+         * @author Jesse-Calebe
+         */
         onCancelButtonPress: function (oEvent) {
-          let oFileUploader = oUploadCsvFragment
-            .getContent()[0]
-            .getContent()[0];
-
-          oFileUploader.clear();
-          oUploadCsvFragment.close();
+          // Close dialog, and refresh list report
+          this._closeUploadCsvDialog();
         },
+        /**
+         * Handles the file load event after the file is read.
+         *
+         * This function processes the CSV file content, creates product entries based on the data,
+         * clears the file uploader, closes the upload dialog, and refreshes the model.
+         *
+         * @async
+         * @function _handleFileOnLoad
+         * @param {ProgressEvent<FileReader>} oEvent - The file reader event that contains the loaded file data.
+         * @memberOf jcss.maintain.product.ext.controller.ProductObjectPage
+         * @author Jesse-Calebe
+         */
         _handleFileOnLoad: async function (oEvent) {
-          debugger
+          // Retrieves the CSV file content.
           let sCsv = oEvent.target.result;
 
+          // Splits the CSV content into lines, and removes header line.
           var aTextLines = sCsv.split(/\r\n|\n/);
-          aTextLines.shift();
+          aTextLines.shift(); // Removes the header line.
 
+          // Iterates over each line of the CSV file and creates product entries.
           await aTextLines.forEach(async (oLineData) => {
             let aLineData = oLineData.split(";");
 
+            // Checks if the line is not empty before creating the product entry.
             if (!(aLineData.length === 0) && !(aLineData[0] === "")) {
-              let oCreated = await oProduct.create({
+              // let oCreated = await oProduct.create({
+              oProduct.create({
                 productId: aLineData[0],
                 name: aLineData[1],
                 weight: aLineData[2],
@@ -94,19 +182,51 @@ sap.ui.define(
             }
           });
 
+          // Close dialog, and refresh list report
+          that._closeUploadCsvDialog();
+        },
+        /**
+         * Handles the file reader error event.
+         *
+         * This function is triggered if an error occurs while reading the file.
+         *
+         * @function _handleFileOnError
+         * @param {ProgressEvent<FileReader>} oEvent - The file reader error event.
+         * @memberOf jcss.maintain.product.ext.controller.ProductObjectPage
+         * @author Jesse-Calebe
+         */
+        _handleFileOnError: function (oEvent) {
+          // Displays an alert if the file could not be read.
+          if (oEvent.target.error.name == "NotReadableError") {
+            alert("Cannot read");
+          }
+        },
+        /**
+         * Closes the CSV upload dialog and clears the file uploader.
+         *
+         * This function clears the file uploader input field, closes the CSV upload dialog,
+         * and refreshes the model data to ensure any changes are reflected.
+         *
+         * @async
+         * @function _closeUploadCsvDialog
+         * @memberOf jcss.maintain.product.ext.controller.ProductObjectPage
+         * @returns {Promise<void>} Resolves when the model data is refreshed.
+         * @author Jesse-Calebe
+         */
+        _closeUploadCsvDialog: async function () {
+          // Gets the file uploader from the upload dialog fragment.
           let oFileUploader = oUploadCsvFragment
             .getContent()[0]
             .getContent()[0];
 
+          // Clears the file uploader.
           oFileUploader.clear();
+
+          // Closes the upload dialog.
           oUploadCsvFragment.close();
 
+          // Refreshes the model data.
           await that.base.getExtensionAPI().refresh();
-        },
-        _handleFileOnError: function (oEvent) {
-          if (oEvent.target.error.name == "NotReadableError") {
-            alert("Cannot read");
-          }
         },
       }
     );
