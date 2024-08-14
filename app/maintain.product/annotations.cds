@@ -21,83 +21,21 @@ annotate service.SingletonSet with @(
     }, ],
 );
 
-annotate service.Product with @(
-    UI.HeaderInfo          : {
-        TypeName      : '{i18n>Product}',
-        TypeNamePlural: '{i18n>Products}',
-        Title         : {
-            $Type: 'UI.DataField',
-            Value: '{i18n>Product}: {productId}',
-        },
+annotate service.Product with @(UI.LineItem: [
+    {
+        $Type: 'UI.DataField',
+        Value: productId,
     },
-    UI.Facets              : [
-        {
-            $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>details}',
-            ID    : 'details',
-            Target: '@UI.FieldGroup#Details',
-        },
-        {
-            $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>metaData}',
-            ID    : 'metadata',
-            Target: '@UI.FieldGroup#Metadata',
-        },
-    ],
-    UI.FieldGroup #Details : {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            {
-                $Type: 'UI.DataField',
-                Value: name,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: weight,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: uom,
-            },
-        ]
+    {
+        $Type: 'UI.DataField',
+        Value: name
     },
-    UI.FieldGroup #Metadata: {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            {
-                $Type: 'UI.DataField',
-                Value: createdBy,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: createdAt,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: modifiedBy,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: modifiedAt,
-            },
-        ]
+    {
+        $Type: 'UI.DataField',
+        Value: weight,
     },
-    UI.LineItem            : [
-        {
-            $Type: 'UI.DataField',
-            Value: productId,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: name
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: weight,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: uom,
-        },
-    ]
-);
+    {
+        $Type: 'UI.DataField',
+        Value: uom,
+    },
+]);
