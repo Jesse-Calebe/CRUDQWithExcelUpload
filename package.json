@@ -10,7 +10,9 @@
     "@sap/cds-compiler": "^5.1.2",
     "@sap/cds-dk": "^8.1.1",
     "@sap/cds-fiori": "^1.2.7",
-    "express": "^4"
+    "express": "^4",
+    "@sap/xssec": "^4",
+    "@cap-js/hana": "^1"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
@@ -24,7 +26,28 @@
   "cds": {
     "requires": {
       "[development]": {
-        "db": "sqlite"
+        "db": "sqlite",
+        "auth": {
+          "kind": "basic",
+          "users": {
+            "gandalf": {
+              "password": "you_shall_not_pass",
+              "roles": [
+                "admin"
+              ]
+            },
+            "aragorn": {
+              "password": "arwen",
+              "roles": [
+                "viewer"
+              ]
+            }
+          }
+        }
+      },
+      "[production]": {
+        "auth": "xsuaa",
+        "db": "hana"
       }
     }
   },

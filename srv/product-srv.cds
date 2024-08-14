@@ -7,3 +7,14 @@ service ProductSrv {
     entity SingletonSet as projection on schema.Singleton;
 
 }
+
+annotate ProductSrv.SingletonSet with @(restrict: [
+    {
+        grant: ['READ'],
+        to   : ['viewer']
+    },
+    {
+        grant: ['*'],
+        to   : ['admin']
+    }
+]);
