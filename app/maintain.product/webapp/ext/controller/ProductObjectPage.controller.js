@@ -4,7 +4,7 @@ sap.ui.define(
     "use strict";
 
     // Globals
-    var oUploadCsvFragment, oFileToRead, oProduct, that;
+    var that, oUploadCsvFragment, oFileToRead, oProduct, oI18nBundle;
 
     return ControllerExtension.extend(
       "jcss.maintain.product.ext.controller.ProductObjectPage",
@@ -46,6 +46,14 @@ sap.ui.define(
           oProduct = oModel.bindList(
             "/SingletonSet(id='dummy',IsActiveEntity=false)/product"
           );
+
+          // Initialize i18n bundle
+          if (!oI18nBundle) {
+            oI18nBundle = this.base
+              .getExtensionAPI()
+              .getModel("i18n")
+              .getResourceBundle();
+          }
 
           // Loads the CSV upload dialog fragment if it is not already loaded.
           if (!oUploadCsvFragment) {
@@ -109,10 +117,7 @@ sap.ui.define(
          */
         onDownloadTemplateButtonPress: function (oEvent) {
           // Creates the content for the CSV template.
-          const aContent = [
-            ["Product ID;Name;Weight;Unit of Measure"],
-            ["1;Café;200;g"],
-          ];
+          const aContent = this._getTemplateContent();
           const sContent = aContent.join("\r\n");
           const sCsvType = "text/csv;charset=utf-8,%EF%BB%BF,SEP=";
 
@@ -233,6 +238,25 @@ sap.ui.define(
 
           // Refreshes the model data.
           await that.base.getExtensionAPI().refresh();
+        },
+
+        _getTemplateContent: function () {
+          return [[this._getCsvColumns().join(";")]];
+        },
+        _getCsvColumns() {
+          return [
+            this._getI18nText("productId"),
+            this._getI18nText("name"),
+            this._getI18nText("weight"),
+            this._getI18nText("uom"),
+          ];
+        },
+        _getI18nText(sTextId) {
+          if (oI18nBundle) {
+            return oI18nBundle.getText(sTextId);
+          }
+
+          return sTextId;
         },
       }
     );
