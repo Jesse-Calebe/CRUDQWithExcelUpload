@@ -31,13 +31,11 @@
           "kind": "basic",
           "users": {
             "gandalf": {
-              "password": "you_shall_not_pass",
               "roles": [
                 "admin"
               ]
             },
             "aragorn": {
-              "password": "arwen",
               "roles": [
                 "viewer"
               ]
