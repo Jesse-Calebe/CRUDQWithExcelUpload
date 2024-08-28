@@ -21,13 +21,17 @@ sap.ui.define(["sap/fe/core/AppComponent"], function (Component) {
     init: async function () {
       // Call init function of base class (Component)
       Component.prototype.init.apply(this, arguments);
-
+      
       // GET request to SingletonSet service in backend
-      let oSingletonSetContext = this.getModel().bindContext("/SingletonSet");
+      let oSingletonSetContext = this.getModel().bindContext(
+        "/SingletonSet?$expand=DraftAdministrativeData"
+      );
       let oDataResult = await oSingletonSetContext.requestObject();
 
       // Determine active entity state based on draft existence
-      let bActiveEntity = !oDataResult.value[0].HasDraftEntity;
+      let bActiveEntity = oDataResult.value[0].HasDraftEntity
+        ? !oDataResult.value[0].DraftAdministrativeData.DraftIsCreatedByMe
+        : true;
 
       // Build key for route
       let sKey = `id='dummy',IsActiveEntity=${bActiveEntity}`;
