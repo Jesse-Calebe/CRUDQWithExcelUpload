@@ -20,5 +20,6 @@ entity Product : managed {
         uom       : String(3)
         @Common.Label: '{i18n>uom}';
         singleton : Association to one Singleton
+        default 'dummy'
         @UI.Hidden;
 }
