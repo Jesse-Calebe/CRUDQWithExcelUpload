@@ -10,16 +10,18 @@ entity Singleton {
 }
 
 entity Product : managed {
-    key productId : String(20)
-        @mandatory
-        @Common.Label: '{i18n>productId}';
-        name      : String(255)
-        @Common.Label: '{i18n>name}';
-        weight    : Decimal(10, 3)
-        @Common.Label: '{i18n>weight}';
-        uom       : String(3)
-        @Common.Label: '{i18n>uom}';
-        singleton : Association to one Singleton
-        default 'dummy'
-        @UI.Hidden;
+    key productId : String(20);
+        name      : String(255);
+        weight    : Decimal(10, 3);
+        uom       : String(3);
+        singleton : Association to one Singleton default 'dummy';
+}
+
+// Base annotations
+annotate Product with {
+    productId  @mandatory  @Common.Label: '{i18n>productId}';
+    name       @Common.Label: '{i18n>name}';
+    weight     @Common.Label: '{i18n>weight}';
+    uom        @Common.Label: '{i18n>uom}';
+    singleton  @UI.Hidden;
 }
