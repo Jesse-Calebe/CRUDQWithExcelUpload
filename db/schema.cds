@@ -10,7 +10,7 @@ entity Singleton {
 };
 
 entity Product : managed {
-    key productId : String(20);
+    key productId : String(10);
         name      : String(255);
         weight    : Decimal(10, 3);
         uom       : Association to Uom;
