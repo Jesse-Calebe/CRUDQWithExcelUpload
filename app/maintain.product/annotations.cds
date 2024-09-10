@@ -36,6 +36,10 @@ annotate service.Product with @(UI.LineItem: [
     },
     {
         $Type: 'UI.DataField',
-        Value: uom,
+        Value: uom_uom,
     },
 ]);
+
+annotate service.Product with {
+    uom @Common.Text: uom.description
+};
