@@ -14,6 +14,7 @@ entity Product : managed {
         name      : String(255);
         weight    : Decimal(10, 3);
         uom       : Association to Uom;
+        status    : Association to Status default '01';
         singleton : Association to one Singleton default 'dummy';
 };
 
@@ -22,6 +23,12 @@ entity Uom {
     key uom         : String(5);
         description : String(255);
 };
+
+@cds.odata.valuelist
+entity Status {
+    key status      : String(2);
+        description : String(255);
+}
 
 annotate Product with {
     productId
@@ -34,6 +41,9 @@ annotate Product with {
     uom
     @Common.Label                   : '{i18n>uom}'
     @Common.ValueListWithFixedValues: true;
+    status
+    @Common.Label: '{i18n>status}'
+    @Common.ValueListWithFixedValues: true;
     singleton
     @UI.Hidden;
 };
@@ -44,3 +54,10 @@ annotate Uom with {
     description
     @Common.Label: '{i18n>uomDescription}';
 };
+
+annotate Status with {
+    status
+    @Common.Label: '{i18n>status}';
+    description
+    @Common.Label: '{i18n>statusDescription}';
+}

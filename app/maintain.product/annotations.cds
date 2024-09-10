@@ -39,8 +39,14 @@ annotate service.Product with @(UI.LineItem: [
         $Type: 'UI.DataField',
         Value: uom_uom,
     },
+    {
+        $Type                  : 'UI.DataField',
+        Value                  : status_status,
+        ![@Common.FieldControl]:  { $edmJson : {$If : [ { $Eq : [ { $Path : 'HasActiveEntity'}, true ]}, 3, 1 ]}},
+    },
 ]);
 
 annotate service.Product with {
-    uom @Common.Text: uom.description;
+    uom    @Common.Text: uom.description;
+    status @Common.Text: status.description;
 };
