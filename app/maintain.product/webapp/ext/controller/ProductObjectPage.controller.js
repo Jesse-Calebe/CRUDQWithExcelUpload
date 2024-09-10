@@ -182,7 +182,7 @@ sap.ui.define(
                 productId: aLineData[0],
                 name: aLineData[1],
                 weight: aLineData[2],
-                uom: aLineData[3],
+                uom_uom: aLineData[3],
               });
             }
           });

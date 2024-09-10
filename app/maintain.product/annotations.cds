@@ -1,5 +1,6 @@
 using ProductSrv as service from '../../srv/product-srv';
 
+
 annotate service.SingletonSet with @(
     UI.DeleteHidden: true,
     UI.CreateHidden: true,
@@ -41,5 +42,5 @@ annotate service.Product with @(UI.LineItem: [
 ]);
 
 annotate service.Product with {
-    uom @Common.Text: uom.description
+    uom @Common.Text: uom.description;
 };
