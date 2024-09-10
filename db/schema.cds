@@ -23,13 +23,19 @@ entity Uom {
         description : String(255);
 };
 
-// Base annotations
 annotate Product with {
-    productId  @mandatory                   @Common.Label                   : '{i18n>productId}';
-    name       @Common.Label: '{i18n>name}';
-    weight     @Common.Label: '{i18n>weight}';
-    uom        @Common.Label: '{i18n>uom}'  @Common.ValueListWithFixedValues: true;
-    singleton  @UI.Hidden;
+    productId
+    @mandatory
+    @Common.Label                   : '{i18n>productId}';
+    name
+    @Common.Label                   : '{i18n>name}';
+    weight
+    @Common.Label                   : '{i18n>weight}';
+    uom
+    @Common.Label                   : '{i18n>uom}'
+    @Common.ValueListWithFixedValues: true;
+    singleton
+    @UI.Hidden;
 };
 
 annotate Uom with {
