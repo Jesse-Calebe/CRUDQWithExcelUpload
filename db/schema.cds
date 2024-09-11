@@ -19,12 +19,14 @@ entity Product : managed {
 };
 
 @cds.odata.valuelist
+@cds.autoexpose
 entity Uom {
     key uom         : String(5);
         description : String(255);
 };
 
 @cds.odata.valuelist
+@cds.autoexpose
 entity Status {
     key status      : String(2);
         description : String(255);
@@ -42,7 +44,7 @@ annotate Product with {
     @Common.Label                   : '{i18n>uom}'
     @Common.ValueListWithFixedValues: true;
     status
-    @Common.Label: '{i18n>status}'
+    @Common.Label                   : '{i18n>status}'
     @Common.ValueListWithFixedValues: true;
     singleton
     @UI.Hidden;
