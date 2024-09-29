@@ -6,7 +6,7 @@ service ProductSrv {
     @odata.draft.enabled
     entity SingletonSet as projection on schema.Singleton;
 
-}
+};
 
 annotate ProductSrv.SingletonSet with @(restrict: [
     {

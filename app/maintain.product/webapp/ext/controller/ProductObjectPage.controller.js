@@ -237,7 +237,12 @@ sap.ui.define(
           oUploadCsvFragment.close();
 
           // Refreshes the model data.
-          await that.base.getExtensionAPI().refresh();
+          try {
+            await that.base.getExtensionAPI().refresh();
+          } catch (oError) {
+            that.base.getModel().resetChanges();
+            await that.base.getExtensionAPI().refresh();
+          }
         },
 
         _getTemplateContent: function () {
