@@ -136,6 +136,9 @@ sap.ui.define(
 
           // Triggers the download.
           oLink.click();
+
+          // Free blob object URL from memory
+          URL.revokeObjectURL(sTextFileURL);
         },
         /**
          * Handles the cancel button press event.
