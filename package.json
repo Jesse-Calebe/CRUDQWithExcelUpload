@@ -17,6 +17,7 @@
   "devDependencies": {
     "@cap-js/sqlite": "^1",
     "@sap/eslint-plugin-cds": "^3",
+    "cds-launchpad-plugin": "^2.2.0",
     "eslint": "^9"
   },
   "scripts": {
