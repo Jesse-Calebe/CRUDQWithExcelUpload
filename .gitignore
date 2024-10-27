@@ -34,3 +34,8 @@ mta_archives/
 
 # @cap-js/cds-typer
 @cds-models
+
+# Unit test
+test/coverage
+junit.xml
+test-report.xml
