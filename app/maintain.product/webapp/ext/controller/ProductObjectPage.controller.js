@@ -47,14 +47,6 @@ sap.ui.define(
             "/SingletonSet(id='dummy',IsActiveEntity=false)/product"
           );
 
-          // Initialize i18n bundle
-          if (!oI18nBundle) {
-            oI18nBundle = this.base
-              .getExtensionAPI()
-              .getModel("i18n")
-              .getResourceBundle();
-          }
-
           // Loads the CSV upload dialog fragment if it is not already loaded.
           if (!oUploadCsvFragment) {
             oUploadCsvFragment = await this.base
@@ -174,6 +166,8 @@ sap.ui.define(
           var aTextLines = sCsv.split(/\r\n|\n/);
           aTextLines.shift(); // Removes the header line.
 
+          that._checkBeforeCreate(aTextLines);
+
           // Iterates over each line of the CSV file and creates product entries.
           await aTextLines.forEach(async (oLineData) => {
             let aLineData = oLineData.split(";");
@@ -204,15 +198,11 @@ sap.ui.define(
          * @author Jesse-Calebe
          */
         _handleFileOnError: function (oEvent) {
-          // Displays an alert if the file could not be read.
           if (oEvent.target.error.name == "NotReadableError") {
-            let oMessageStrip = oUploadCsvFragment
-              .getContent()[0]
-              .getContent()[0];
-
-            oMessageStrip.setType(sap.ui.core.MessageType.Error);
-            oMessageStrip.setText("Cannot read file.");
-            oMessageStrip.setVisible(true);
+            this._changeDialogMessage(
+              "Cannot read file.",
+              sap.ui.core.MessageType.Error
+            );
           }
         },
         /**
@@ -262,9 +252,75 @@ sap.ui.define(
         _getI18nText(sTextId) {
           if (oI18nBundle) {
             return oI18nBundle.getText(sTextId);
-          }
+          } else {
+            oI18nBundle = this.base
+              .getExtensionAPI()
+              .getModel("i18n")
+              .getResourceBundle();
 
-          return sTextId;
+            if (!oI18nBundle) return sTextId;
+
+            return oI18nBundle.getText(sTextId);
+          }
+        },
+
+        _changeDialogMessage(sMessage, Type, bHide = true) {
+          let oMessageStrip = oUploadCsvFragment
+            .getContent()[0]
+            .getContent()[0];
+
+          oMessageStrip.setType(Type);
+          oMessageStrip.setText(sMessage);
+          oMessageStrip.setVisible(bHide);
+        },
+
+        _checkBeforeCreate(aTextLines) {},
+        onExportCSV: async function (oEvent) {
+          let sPath = oEvent.getPath();
+          let oModel = this.base.getExtensionAPI().getModel();
+
+          oProduct = await oModel.bindList(`${sPath}/product`);
+
+          let aContexts = await oProduct.requestContexts();
+
+          // Creates the content for the CSV template.
+          const aContent = this._getCSVData(aContexts);
+
+          const sContent = aContent.join("\r\n");
+
+          const sCsvType = "text/csv;charset=utf-8,%EF%BB%BF,SEP=";
+
+          // Creates a Blob object with the CSV content.
+          let oCsvData = new Blob(["\ufeff" + sContent], { type: sCsvType });
+
+          // Generates a URL for the Blob object.
+          let sTextFileURL = URL.createObjectURL(oCsvData);
+
+          // Creates a temporary link element to trigger the download.
+          let oLink = document.createElement("a");
+
+          // Sets the download URL and filename.
+          oLink.href = sTextFileURL;
+          oLink.download = `Products_exported_s${new Date()}`;
+
+          // Triggers the download.
+          oLink.click();
+
+          // Free blob object URL from memory
+          URL.revokeObjectURL(sTextFileURL);
+        },
+        _getCSVData: function (aContexts) {
+          const aResult = this._getTemplateContent();
+
+          aContexts.forEach((oContext) => {
+            let oData = oContext.getObject();
+
+            aResult.push([
+              `${oData.productId};${oData.name};${oData.weight};${oData.uom_uom}`,
+            ]);
+          });
+
+          return aResult;
         },
       }
     );

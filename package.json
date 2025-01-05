@@ -7,10 +7,11 @@
   "private": true,
   "dependencies": {
     "@cap-js/hana": "^1",
-    "@sap/cds": "^8.3.1",
-    "@sap/cds-compiler": "^5.1.2",
-    "@sap/cds-dk": "^8.3.0",
+    "@sap/cds": "^8.6.0",
+    "@sap/cds-compiler": "^5.4.2",
+    "@sap/cds-dk": "^8.6.1",
     "@sap/cds-fiori": "^1.2.7",
+    "@sap/cds-foss": "^5.0.1",
     "@sap/xssec": "^4",
     "express": "^4"
   },

@@ -156,6 +156,17 @@
                       "enabled": "{= ${ui>/editMode} === 'Editable'}",
                       "requiresSelection": false,
                       "text": "{i18n>uploadCsv}"
+                    },
+                    "idExportCSV": {
+                      "press": ".extension.jcss.maintain.product.ext.controller.ProductObjectPage.onExportCSV",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "{i18n>exportCsv}",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "idUploadCsv"
+                      }
                     }
                   },
                   "tableSettings": {
