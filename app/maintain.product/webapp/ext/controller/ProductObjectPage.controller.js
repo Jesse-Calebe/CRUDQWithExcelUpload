@@ -110,27 +110,8 @@ sap.ui.define(
         onDownloadTemplateButtonPress: function (oEvent) {
           // Creates the content for the CSV template.
           const aContent = this._getTemplateContent();
-          const sContent = aContent.join("\r\n");
-          const sCsvType = "text/csv;charset=utf-8,%EF%BB%BF,SEP=";
 
-          // Creates a Blob object with the CSV content.
-          let oCsvData = new Blob(["\ufeff" + sContent], { type: sCsvType });
-
-          // Generates a URL for the Blob object.
-          let sTextFileURL = URL.createObjectURL(oCsvData);
-
-          // Creates a temporary link element to trigger the download.
-          let oLink = document.createElement("a");
-
-          // Sets the download URL and filename.
-          oLink.href = sTextFileURL;
-          oLink.download = "Template";
-
-          // Triggers the download.
-          oLink.click();
-
-          // Free blob object URL from memory
-          URL.revokeObjectURL(sTextFileURL);
+          this._downloadCsv("Template", aContent.join("\r\n"));
         },
         /**
          * Handles the cancel button press event.
@@ -286,8 +267,12 @@ sap.ui.define(
           // Creates the content for the CSV template.
           const aContent = this._getCSVData(aContexts);
 
-          const sContent = aContent.join("\r\n");
-
+          this._downloadCsv(
+            `Products_exported_s${new Date()}`,
+            aContent.join("\r\n")
+          );
+        },
+        _downloadCsv: function (sFileName, sContent) {
           const sCsvType = "text/csv;charset=utf-8,%EF%BB%BF,SEP=";
 
           // Creates a Blob object with the CSV content.
@@ -301,7 +286,7 @@ sap.ui.define(
 
           // Sets the download URL and filename.
           oLink.href = sTextFileURL;
-          oLink.download = `Products_exported_s${new Date()}`;
+          oLink.download = sFileName;
 
           // Triggers the download.
           oLink.click();
@@ -309,17 +294,34 @@ sap.ui.define(
           // Free blob object URL from memory
           URL.revokeObjectURL(sTextFileURL);
         },
+        /**
+         * Prepares CSV data from the provided contexts.
+         *
+         * This function generates an array containing CSV-formatted data based on the
+         * provided contexts. Each context is transformed into a row in the CSV, with
+         * fields separated by semicolons (`;`).
+         *
+         * @param {sap.ui.model.Context[]} aContexts - Array of context objects containing the data.
+         * @returns {string[][]} - A two-dimensional array where each inner array represents
+         *                         a row in the CSV format.
+         *                         Example: [["productId;name;weight;uom_uom"], ...]
+         * @private
+         */
         _getCSVData: function (aContexts) {
+          // Retrieve the base content for the CSV (e.g., headers or initial rows)
           const aResult = this._getTemplateContent();
 
+          // Loop through each context and add its data to the CSV result
           aContexts.forEach((oContext) => {
             let oData = oContext.getObject();
 
+            // Append the CSV-formatted row to the result array
             aResult.push([
               `${oData.productId};${oData.name};${oData.weight};${oData.uom_uom}`,
             ]);
           });
 
+          // Return the complete CSV data
           return aResult;
         },
       }
