@@ -1,6 +1,6 @@
 sap.ui.define(
-  ["sap/ui/core/mvc/ControllerExtension"],
-  function (ControllerExtension) {
+  ["sap/ui/core/mvc/ControllerExtension", "sap/m/MessageBox"],
+  function (ControllerExtension, MessageBox) {
     "use strict";
 
     // Globals
@@ -263,6 +263,9 @@ sap.ui.define(
           oProduct = await oModel.bindList(`${sPath}/product`);
 
           let aContexts = await oProduct.requestContexts();
+
+          if (aContexts.length === 0)
+            return MessageBox.error(this._getI18nText("noDataToExport"));
 
           // Creates the content for the CSV template.
           const aContent = this._getCSVData(aContexts);

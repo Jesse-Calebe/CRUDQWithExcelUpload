@@ -27,8 +27,6 @@ sap.ui.define(
         var oRouter = this.getRouter();
 
         oRouter.getRoute("SingletonSetList").attachMatched(async (oEvent) => {
-          debugger;
-
           var sDirection =
             oEvent.getParameters().targetControl._sTransitionDirection;
 
