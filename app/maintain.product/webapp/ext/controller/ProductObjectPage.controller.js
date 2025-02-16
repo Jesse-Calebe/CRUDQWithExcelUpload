@@ -1,10 +1,18 @@
 sap.ui.define(
-  ["sap/ui/core/mvc/ControllerExtension", "sap/m/MessageBox"],
-  function (ControllerExtension, MessageBox) {
+  [
+    "sap/ui/core/mvc/ControllerExtension",
+    "sap/m/MessageBox",
+    "sap/ui/core/MessageType",
+  ],
+  function (ControllerExtension, MessageBox, MessageType) {
     "use strict";
 
     // Globals
     var that, oUploadCsvFragment, oFileToRead, oProduct, oI18nBundle;
+
+    const FRAGMENTS = {
+      UPLOAD_CSV: "jcss.maintain.product.ext.view.dialogs.UploadCsv",
+    };
 
     return ControllerExtension.extend(
       "jcss.maintain.product.ext.controller.ProductObjectPage",
@@ -36,29 +44,24 @@ sap.ui.define(
          * @author Jesse-Calebe
          */
         onUploadCsvPress: async function (oEvent) {
-          // Gets the model associated with the base component.
           let oModel = this.base.getModel();
 
-          // Transfers "this" to a global object, to be accessed in the "_handleFileOnLoad" function.
           that = this;
 
-          // Creates a "bindList" based on the SingletonSet context
           oProduct = oModel.bindList(
             "/SingletonSet(id='dummy',IsActiveEntity=false)/product"
           );
 
-          // Loads the CSV upload dialog fragment if it is not already loaded.
           if (!oUploadCsvFragment) {
             oUploadCsvFragment = await this.base
               .getExtensionAPI()
               .loadFragment({
                 id: "idUploadCsvFrag",
-                name: "jcss.maintain.product.ext.view.dialogs.UploadCsv",
+                name: FRAGMENTS.UPLOAD_CSV,
                 controller: this,
               });
           }
 
-          // Opens the CSV upload dialog.
           if (oUploadCsvFragment) {
             oUploadCsvFragment.open();
           }
@@ -75,7 +78,6 @@ sap.ui.define(
          * @author Jesse-Calebe
          */
         onFileUploaderChange: function (oEvent) {
-          // Retrieves the selected file from the event parameters.
           oFileToRead = oEvent.getParameters().files["0"];
         },
         /**
@@ -89,10 +91,8 @@ sap.ui.define(
          * @author Jesse-Calebe
          */
         onUploadButtonPress: function (oEvent) {
-          // Creates a new FileReader to read the selected file.
           let oReader = new FileReader();
 
-          // Reads the selected file as text. Sets up the onload event handler and the onerror event handler.
           oReader.readAsText(oFileToRead);
           oReader.onload = this._handleFileOnLoad;
           oReader.onerror = this._handleFileOnError;
@@ -108,7 +108,6 @@ sap.ui.define(
          * @author Jesse-Calebe
          */
         onDownloadTemplateButtonPress: function (oEvent) {
-          // Creates the content for the CSV template.
           const aContent = this._getTemplateContent();
 
           this._downloadCsv("Template", aContent.join("\r\n"));
@@ -124,7 +123,6 @@ sap.ui.define(
          * @author Jesse-Calebe
          */
         onCancelButtonPress: function (oEvent) {
-          // Close dialog, and refresh list report
           this._closeUploadCsvDialog();
         },
         /**
@@ -140,22 +138,17 @@ sap.ui.define(
          * @author Jesse-Calebe
          */
         _handleFileOnLoad: async function (oEvent) {
-          // Retrieves the CSV file content.
           let sCsv = oEvent.target.result;
 
-          // Splits the CSV content into lines, and removes header line.
           var aTextLines = sCsv.split(/\r\n|\n/);
-          aTextLines.shift(); // Removes the header line.
+          aTextLines.shift();
 
           that._checkBeforeCreate(aTextLines);
 
-          // Iterates over each line of the CSV file and creates product entries.
           await aTextLines.forEach(async (oLineData) => {
             let aLineData = oLineData.split(";");
 
-            // Checks if the line is not empty before creating the product entry.
             if (!(aLineData.length === 0) && !(aLineData[0] === "")) {
-              // let oCreated = await oProduct.create({
               oProduct.create({
                 productId: aLineData[0],
                 name: aLineData[1],
@@ -165,7 +158,6 @@ sap.ui.define(
             }
           });
 
-          // Close dialog, and refresh list report
           that._closeUploadCsvDialog();
         },
         /**
@@ -180,10 +172,7 @@ sap.ui.define(
          */
         _handleFileOnError: function (oEvent) {
           if (oEvent.target.error.name == "NotReadableError") {
-            this._changeDialogMessage(
-              "Cannot read file.",
-              sap.ui.core.MessageType.Error
-            );
+            this._changeDialogMessage("Cannot read file.", MessageType.Error);
           }
         },
         /**
@@ -199,18 +188,14 @@ sap.ui.define(
          * @author Jesse-Calebe
          */
         _closeUploadCsvDialog: async function () {
-          // Gets the file uploader from the upload dialog fragment.
           let oFileUploader = oUploadCsvFragment
             .getContent()[0]
             .getContent()[1];
 
-          // Clears the file uploader.
           oFileUploader.clear();
 
-          // Closes the upload dialog.
           oUploadCsvFragment.close();
 
-          // Refreshes the model data.
           try {
             await that.base.getExtensionAPI().refresh();
           } catch (oError) {
@@ -218,10 +203,19 @@ sap.ui.define(
             await that.base.getExtensionAPI().refresh();
           }
         },
-
+        /**
+         * Gets the CSV template content.
+         * @author Jesse-Calebe
+         * @returns {string[][]} A matrix containing the CSV headers as a single row.
+         */
         _getTemplateContent: function () {
           return [[this._getCsvColumns().join(";")]];
         },
+        /**
+         * Retrieves the CSV column headers in translated form.
+         * @author Jesse-Calebe
+         * @returns {string[]} A list of translated column names for the CSV.
+         */
         _getCsvColumns() {
           return [
             this._getI18nText("productId"),
@@ -230,6 +224,12 @@ sap.ui.define(
             this._getI18nText("uom"),
           ];
         },
+        /**
+         * Retrieves the translated text based on the given text ID.
+         * @author Jesse-Calebe
+         * @param {string} sTextId - The identifier of the text in the i18n bundle.
+         * @returns {string} The translated text corresponding to the ID or the ID itself if the bundle is not available.
+         */
         _getI18nText(sTextId) {
           if (oI18nBundle) {
             return oI18nBundle.getText(sTextId);
@@ -244,7 +244,13 @@ sap.ui.define(
             return oI18nBundle.getText(sTextId);
           }
         },
-
+        /**
+         * Updates the message displayed in the CSV upload dialog.
+         * @author Jesse-Calebe
+         * @param {string} sMessage - The message to be displayed.
+         * @param {string} Type - The message type (e.g., "Success", "Error", "Warning", etc.).
+         * @param {boolean} [bHide=true] - Whether the message should be hidden after display.
+         */
         _changeDialogMessage(sMessage, Type, bHide = true) {
           let oMessageStrip = oUploadCsvFragment
             .getContent()[0]
@@ -254,8 +260,11 @@ sap.ui.define(
           oMessageStrip.setText(sMessage);
           oMessageStrip.setVisible(bHide);
         },
-
-        _checkBeforeCreate(aTextLines) {},
+        /**
+         * Exports product data as a CSV file.
+         * @author Jesse-Calebe
+         * @param {object} oEvent - The event object containing the data path.
+         */
         onExportCSV: async function (oEvent) {
           let sPath = oEvent.getPath();
           let oModel = this.base.getExtensionAPI().getModel();
@@ -267,7 +276,6 @@ sap.ui.define(
           if (aContexts.length === 0)
             return MessageBox.error(this._getI18nText("noDataToExport"));
 
-          // Creates the content for the CSV template.
           const aContent = this._getCSVData(aContexts);
 
           this._downloadCsv(
@@ -275,26 +283,26 @@ sap.ui.define(
             aContent.join("\r\n")
           );
         },
+        /**
+         * Triggers a CSV file download with the specified content.
+         * @author Jesse-Calebe
+         * @param {string} sFileName - The name of the file to be downloaded.
+         * @param {string} sContent - The CSV content to be included in the file.
+         */
         _downloadCsv: function (sFileName, sContent) {
           const sCsvType = "text/csv;charset=utf-8,%EF%BB%BF,SEP=";
 
-          // Creates a Blob object with the CSV content.
           let oCsvData = new Blob(["\ufeff" + sContent], { type: sCsvType });
 
-          // Generates a URL for the Blob object.
           let sTextFileURL = URL.createObjectURL(oCsvData);
 
-          // Creates a temporary link element to trigger the download.
           let oLink = document.createElement("a");
 
-          // Sets the download URL and filename.
           oLink.href = sTextFileURL;
           oLink.download = sFileName;
 
-          // Triggers the download.
           oLink.click();
 
-          // Free blob object URL from memory
           URL.revokeObjectURL(sTextFileURL);
         },
         /**
@@ -311,20 +319,16 @@ sap.ui.define(
          * @private
          */
         _getCSVData: function (aContexts) {
-          // Retrieve the base content for the CSV (e.g., headers or initial rows)
           const aResult = this._getTemplateContent();
 
-          // Loop through each context and add its data to the CSV result
           aContexts.forEach((oContext) => {
             let oData = oContext.getObject();
 
-            // Append the CSV-formatted row to the result array
             aResult.push([
               `${oData.productId};${oData.name};${oData.weight};${oData.uom_uom}`,
             ]);
           });
 
-          // Return the complete CSV data
           return aResult;
         },
       }
