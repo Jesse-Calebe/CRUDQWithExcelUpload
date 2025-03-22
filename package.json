@@ -7,10 +7,10 @@
   "private": true,
   "dependencies": {
     "@cap-js/hana": "^1",
-    "@sap/cds": "^8.6.0",
+    "@sap/cds": "^8.8.3",
     "@sap/cds-compiler": "^5.4.2",
-    "@sap/cds-dk": "^8.6.1",
-    "@sap/cds-fiori": "^1.2.7",
+    "@sap/cds-dk": "^8.8.2",
+    "@sap/cds-fiori": "^1.4.0",
     "@sap/cds-foss": "^5.0.1",
     "@sap/xssec": "^4",
     "express": "^4"
@@ -18,7 +18,6 @@
   "devDependencies": {
     "@cap-js/sqlite": "^1",
     "@sap/eslint-plugin-cds": "^3",
-    "axios": "^1.7.7",
     "cds-launchpad-plugin": "^2.2.0",
     "chai": "^4.4.1",
     "chai-as-promised": "^7.1.2",
