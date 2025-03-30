@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^8",
     "@sap/eslint-plugin-cds": "^3",
     "cds-launchpad-plugin": "^2.2.0",
     "chai": "^4.4.1",
@@ -26,13 +27,18 @@
     "eslint": "^9",
     "jest": "^29.7.0",
     "jest-junit": "^16.0.0",
-    "jest-sonar-reporter": "^2.0.0"
+    "jest-sonar-reporter": "^2.0.0",
+    "rimraf": "^5.0.5",
+    "mbt": "^1.2.29"
   },
   "scripts": {
     "start": "cds-serve",
     "jest": "jest ./test --config ./test/jest.config.js --runInBand --detectOpenHandles --forceExit --ci --coverage",
     "test": "cds bind --profile test --exec npm run jest",
-    "watch-maintain.product": "cds watch --open maintain.product/webapp/index.html?sap-ui-xx-viewCache=false"
+    "watch-maintain.product": "cds watch --open maintain.product/webapp/index.html?sap-ui-xx-viewCache=false",
+    "undeploy": "cf undeploy CRUDQWithExcelUpload --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
   },
   "cds": {
     "requires": {
@@ -65,7 +71,11 @@
         "db": {
           "kind": "sql"
         }
-      }
+      },
+      "auth": "xsuaa"
+    },
+    "sql": {
+      "native_hana_associations": false
     }
   },
   "sapux": [

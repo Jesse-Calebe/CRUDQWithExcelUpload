@@ -39,3 +39,6 @@ mta_archives/
 test/coverage
 junit.xml
 test-report.xml
+
+resources
+dist
