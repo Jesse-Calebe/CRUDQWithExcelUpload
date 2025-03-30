@@ -20,6 +20,7 @@
     "@sap/cds-dk": "^8",
     "@sap/eslint-plugin-cds": "^3",
     "cds-launchpad-plugin": "^2.2.0",
+    "cds-swagger-ui-express": "^0.10.0",
     "chai": "^4.4.1",
     "chai-as-promised": "^7.1.2",
     "chai-shallow-deep-equal": "^1.4.6",
